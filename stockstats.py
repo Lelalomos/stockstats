@@ -84,6 +84,7 @@ _dft_windows = {
     'supertrend': 14,
     'tema': 5,
     'ema': 5,
+    'roi':1,
     'trix': 12,
     'wr': 14,
     'wt': (10, 21),
@@ -108,7 +109,8 @@ _dft_column = {
     'psl': 'close',
     'tema': 'close',
     'trix': 'close',
-    'ema': 'close'
+    'ema': 'close',
+    'roi': 'close'
 }
 
 
@@ -560,6 +562,9 @@ class StockDataFrame(pd.DataFrame):
     def _get_ema(self, meta: _Meta):
         window = meta.int
         self[meta.name] = self.ema(self[meta.column], window)
+        
+    def _get_roi(self, meta: _Meta):
+        self[meta.name] = (self['close'] - self['close'].shift(1)) / self['close'].shift(1) * 100
 
     def _get_wr(self, meta: _Meta):
         """ Williams Overbought/Oversold Index
